@@ -122,11 +122,12 @@ void setGPIO(void);
  */
 
 
+using namespace std;
 using namespace cv;
 
 int main(int argc, char* argv[])
 {
-    std::cout << "Start remoteMove Routine" << std::endl;
+    cout << "Start remoteMove Routine" << endl;
 
     setGPIO();  // wiringPi setup and pin mode set
 
@@ -146,7 +147,7 @@ int main(int argc, char* argv[])
     int sendSize = 65535;
     char buff[sendSize];
 
-    if(!cpature.isOpened())
+    if(!capture.isOpened())
     {
         perror("Open Capture");
         exit(3);
@@ -181,7 +182,7 @@ void setGPIO(void)
 {
     wiringPiSetup();    //It helps you to use wiringPi GPIO pins.
 
-    pinMode(SERVO, OUTPUT);
+    pinMode(SERVO_MOTOR, OUTPUT);
     pinMode(DC_DIRECTION_A, OUTPUT);
     pinMode(DC_DIRECTION_B, OUTPUT);
 }
@@ -190,7 +191,7 @@ void openServer(int sock, struct sockaddr_in server_addr, char sock_opt)
 {
     switch(sock_opt){
         case 'T':
-            if( (sock = socket(AF_INET, SOCK_STREAM)) < 0 )
+            if( (sock = socket(AF_INET, SOCK_STREAM, 0)) < 0 )
             {
                 perror("socket");
                 exit(2);
@@ -198,7 +199,7 @@ void openServer(int sock, struct sockaddr_in server_addr, char sock_opt)
             break;
 
         case 'U':
-            if( (sock = socket(AF_INET, SOCK_DGRAM)) < 0)
+            if( (sock = socket(AF_INET, SOCK_DGRAM, 0)) < 0)
             {
                 perror("socket");
                 exit(2);
@@ -206,7 +207,7 @@ void openServer(int sock, struct sockaddr_in server_addr, char sock_opt)
             break;
 
         default:
-            std::cout << "Sock option is wrong" << std::endl;
+            cout << "Sock option is wrong" << endl;
             exit(2);
             break;
     }
@@ -235,6 +236,5 @@ void msgControl(int sock)
 
     while(1)
     {
-        if((connect_sock
     }
 }
