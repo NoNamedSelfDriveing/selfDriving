@@ -121,6 +121,7 @@ void setGPIO(void);
  *
  */
 
+int port;
 
 using namespace std;
 using namespace cv;
@@ -129,6 +130,12 @@ int main(int argc, char* argv[])
 {
     cout << "Start remoteMove Routine" << endl;
 
+    if(argc < 3)
+    {
+        cout << "Usage: " << argv[0] << " [PORT] [Camera]" << endl;
+        exit(4);
+    }
+    port = atoi(argv[1]);
     setGPIO();  // wiringPi setup and pin mode set
 
     struct sockaddr_in frame_server, msg_server;
@@ -140,10 +147,10 @@ int main(int argc, char* argv[])
     // thread(msg)
 
     int send_len, i;
-    VideoCapture capture = atoi(argv[3]);
+    VideoCapture capture = atoi(argv[2]);
     Mat frame;
     vector<uchar> ibuff;
-    vector<int> param =vector<int>(2);
+    vector<int> param = vector<int>(2);
     int sendSize = 65535;
     char buff[sendSize];
 
@@ -189,6 +196,7 @@ void setGPIO(void)
 
 void openServer(int sock, struct sockaddr_in server_addr, char sock_opt)
 {
+    server_addr = {AF_INET, htons(port), INADDR_ANY};
     switch(sock_opt){
         case 'T':
             if( (sock = socket(AF_INET, SOCK_STREAM, 0)) < 0 )
