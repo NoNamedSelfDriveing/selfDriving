@@ -197,6 +197,8 @@ void setGPIO(void)
 void openServer(int sock, struct sockaddr_in server_addr, char sock_opt)
 {
     server_addr = {AF_INET, htons(port), INADDR_ANY};
+    ++port;
+
     switch(sock_opt){
         case 'T':
             if( (sock = socket(AF_INET, SOCK_STREAM, 0)) < 0 )
@@ -222,13 +224,15 @@ void openServer(int sock, struct sockaddr_in server_addr, char sock_opt)
     
     if(bind(sock, (struct sockaddr*)&server_addr, SIZE) < 0)
     {
-        perror("bind");
+        cout << sock_opt << endl;
+        perror(":bind");
         exit(2);
     }
 
-    if(listen(sock, MAX_CLIENT) < 0)
+    if(sock_opt == 'T' && listen(sock, MAX_CLIENT) < 0)
     {
-        perror("listen");
+        cout << sock_opt << endl;
+        perror(":listen");
         exit(2);
     }
 }
