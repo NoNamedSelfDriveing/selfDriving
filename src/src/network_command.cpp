@@ -16,7 +16,7 @@
 
 #define SIZE sizeof(struct sockaddr_in)
 
-#define SPEED 60
+#define SPEED 40
 
 #define DC_PULSE_OUT 5
 #define DC_A 27
@@ -31,6 +31,10 @@
 #define _BACK 2
 #define _LEFT 4
 #define _RIGHT 8
+
+#define CENTER 1350
+#define RIGHT 1000
+#define LEFT 1650
 
 char log[1024];
 unsigned int i;
@@ -102,17 +106,39 @@ int main(int argc, char *argv[]){
             std::cout << msg << std::endl;
             if(Cont_command & _GO){
                 set_direct(FRONT);
-                if(Cont_command & _LEFT) rotateServo(1550);
-                else if(Cont_command & _RIGHT) rotateServo(2350);
-                else rotateServo(1950);
-                softPwmWrite(DC_PULSE_OUT, SPEED);
+                if(Cont_command & _LEFT) 
+                {
+                    rotateServo(LEFT);
+                    softPwmWrite(DC_PULSE_OUT, SPEED + 20);
+                }
+                else if(Cont_command & _RIGHT) 
+                {
+                    rotateServo(RIGHT);
+                    softPwmWrite(DC_PULSE_OUT, SPEED + 20);
+                }
+                else
+                {
+                    rotateServo(CENTER);
+                    softPwmWrite(DC_PULSE_OUT, SPEED);
+                }
             }
             else if(Cont_command & _BACK){
                 set_direct(BACK);
-                if(Cont_command & _LEFT) rotateServo(1550);
-                else if(Cont_command & _RIGHT) rotateServo(2350);
-                else rotateServo(1950);
-                softPwmWrite(DC_PULSE_OUT, SPEED);
+                if(Cont_command & _LEFT) 
+                {
+                    rotateServo(LEFT);
+                    softPwmWrite(DC_PULSE_OUT, SPEED + 20);
+                }
+                else if(Cont_command & _RIGHT) 
+                {
+                    rotateServo(RIGHT);
+                    softPwmWrite(DC_PULSE_OUT, SPEED + 20);
+                }
+                else 
+                {
+                    rotateServo(CENTER);
+                    softPwmWrite(DC_PULSE_OUT, SPEED);
+                }
             }
             else stop();
         }
@@ -148,5 +174,5 @@ void rotateServo(int time)
     digitalWrite(SERVO, HIGH);
     delayMicroseconds(time);
     digitalWrite(SERVO, LOW);
-    delay(5);
+    delayMicroseconds(23);
 }
