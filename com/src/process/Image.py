@@ -24,7 +24,7 @@ class Image:
 
     def splitImg(self, data):
         self.__img__         = cv2.imdecode(np.frombuffer(data, np.uint8), 1)
-        self.__img__         = self.__img__[:, :]
+        self.__img__         = self.__img__[200:, :]
 
         blur                 = cv2.GaussianBlur(self.__img__, (7,7),1.5, 1.5)
 

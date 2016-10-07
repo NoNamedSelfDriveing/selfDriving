@@ -20,7 +20,7 @@ class Model:
         self.train_op = tf.train.RMSPropOptimizer(0.001, 0.9).minimize(self.cost)
         self.predict_op = tf.argmax(self.py_x, 1)
 
-        self.checkpoint_dir = "/home/fuzer/Dropbox/work/NoNamed/selfDriving/com/src/data/cps/"
+        self.checkpoint_dir = "/home/potato/selfDriving/com/src/data/cps/"
 
         if not os.path.isdir(self.checkpoint_dir):
             os.mkdir(self.checkpoint_dir)
