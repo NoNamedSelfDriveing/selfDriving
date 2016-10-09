@@ -10,6 +10,7 @@ sys.path.insert(0,'./ml')      # 뉴럴넷 관련 클래스 모음
 sys.path.insert(0,'./network') # 전송 관련 모음
 sys.path.insert(0,'./process') # data 처리 클래스 모음
 sys.path.insert(0,'./commend') # 커맨드 처리 클래스 모음
+sys.path.insert(0,'./sms')     # sms 전송 클래스 모음
 
 from Model      import Model
 from Commender  import Commender
