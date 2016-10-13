@@ -12,6 +12,7 @@ class Commender:
         self.__s__ = False
         self.__a__ = False
         self.__d__ = False
+        self.__space__ = True # 기본 상태로 운전자가 주행이 True
 
         self.__commend__ = ""
 
@@ -57,6 +58,11 @@ class Commender:
             elif event.type == pygame.KEYUP and event.key == pygame.K_d:
                 self.__d__ = False
 
+            if event.type == pygame.KEYDOWN and event.key == pygame.K_space:
+                self.__space__ = True
+            elif event.type == pygame.KEYUP and event.key == pygame.K_space:
+                self.__space__ = False
+
         if self.__w__:
             input_key |= 1
 
@@ -68,6 +74,9 @@ class Commender:
 
         if self.__d__:
             input_key |= 8
+
+        if self.__space__:
+            input_key |= 16
 
         commend = str(input_key)
         self.__commend__ = commend

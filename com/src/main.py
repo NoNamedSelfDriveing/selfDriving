@@ -58,12 +58,19 @@ if __name__ == '__main__':
         model.loadLearning(sess)
 
         while True:
+            '''
+            데이터 받고 Tensorflow에서 다음 명령어 예측
+            사용자 조작값 설정하고 핸들(스페이스) 체크
+            10프레임 받고 핸들 그대로 눌리지 않았다면 예측된 명령어로
+            자동차에게 전달
+            '''
             data, addr  = receiver.receive()
             image.splitImg(data)
             # image.setImgInfo()
             # 현재 이미지에 대한 전처리 이미지를 사용하는것이 아니기에 주석처리
 
             data = cv2.resize(image.getImg(),(28,28))
+            # 데이터 수신
 
             label = sess.run(model.predict_op,
             feed_dict={model.X: [data], model.p_keep_conv: 1, model.p_keep_hidden: 1})
@@ -78,11 +85,21 @@ if __name__ == '__main__':
                 commend = 0
 
             print "com     is " + str(commend)
+            # 딥러닝 예측
+
+            commender.setCommendH() # 사용자 조작값 설정
+
+            key = int(commender.getCommend())
+            if key & 0x10: #핸들을 잡고있는 경우
+                mlOption = False
+            else:
+                mlOption = True
+
 
             if mlOption == True:
                 commender.setCommendM(commend)
-            else:
-                commender.setCommendH()
+            # 딥러닝 예측값 설정
+
             '''
             commender.addCommend(image.angle)
             commender.addCommend(image.left_angle)
@@ -90,21 +107,22 @@ if __name__ == '__main__':
             commender.addCommend(image.x_avr)
             현재 커맨드에 추가해서 보낼 이유 없음 - 이미지 전처리 사용안함
             '''
-
+            
             commender.endCommend()
             commender.sendCommend(receiver.commend_sock, receiver.commend_sock)
             commender.printCommend()
             print ""
+            # 명령어 전송
 
             img = cv2.resize(image.getImg(), (28, 28))
-
             cv2.imwrite(imgcation + str(count) + ".png", img)
-
             log = commender.getCommend()+"\n"
             logger.write(log)
+            # 로그 저장
 
             cv2.imshow('image', image.getImg())
             cv2.imshow('image2',image.getCanny())
+            # 이미지 프레임 출력
 
             count += 1
 
