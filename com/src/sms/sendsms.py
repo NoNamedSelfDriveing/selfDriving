@@ -21,7 +21,7 @@ def sms():
 
     cs.setuser("ID", "PW")
 
-    cs.addsms("발신자", "수신자", "내용")
+    cs.addsms("수신자", "발신자", "내용")
 
     nsent = 0
     if cs.connect():
