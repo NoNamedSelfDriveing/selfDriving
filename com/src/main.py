@@ -55,8 +55,9 @@ if __name__ == '__main__':
     count = 0  # 프레임 카운트
     commend = 0
 
+    print "wait 20sec"
     time.sleep(20)
-    
+
     with tf.Session() as sess:
         # you need to initialize all variables
         tf.initialize_all_variables().run()
