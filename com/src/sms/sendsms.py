@@ -10,7 +10,8 @@ import sys
 import coolsms
 
 
-def sms():
+def sms(id, pw, sender, receiver, msg):
+"""
     cs = coolsms.sms()
 
     cs.appversion("TEST/1.0")
@@ -19,9 +20,9 @@ def sms():
     # 지원 인코딩: euckr, utf8
     cs.charset("utf8")
 
-    cs.setuser("ID", "PW")
+    cs.setuser(id, pw)
 
-    cs.addsms("수신자", "발신자", "내용")
+    cs.addsms(receiver, sender, msg)
 
     nsent = 0
     if cs.connect():
@@ -33,6 +34,8 @@ def sms():
     # 연결 해제
     cs.disconnect()
     cs.emptyall()
+"""
+    print id, pw, sender, receiver, msg
 
 if __name__ == "__main__":
     main()
