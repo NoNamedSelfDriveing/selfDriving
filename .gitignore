@@ -1,4 +1,5 @@
-data/
 *.tar.gz
 *.zip
-phone_book
+*.txt
+*.jpg
+*.pyc

@@ -1,6 +1,5 @@
 import os
-
-import sendsms
+from sendsms import sms
 
 FNAME = './manager/phone_book'
 

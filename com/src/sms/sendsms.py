@@ -9,33 +9,33 @@
 import sys
 import coolsms
 
+class sms(object):
+    def sms(id, pw, sender, receiver, msg):
+        """
+        cs = coolsms.sms()
 
-def sms(id, pw, sender, receiver, msg):
-"""
-    cs = coolsms.sms()
+        cs.appversion("TEST/1.0")
 
-    cs.appversion("TEST/1.0")
+        # 한글인코딩 방식을 설정합니다.  (생략시 euckr로 설정)
+        # 지원 인코딩: euckr, utf8
+        cs.charset("utf8")
 
-    # 한글인코딩 방식을 설정합니다.  (생략시 euckr로 설정)
-    # 지원 인코딩: euckr, utf8
-    cs.charset("utf8")
+        cs.setuser(id, pw)
 
-    cs.setuser(id, pw)
+        cs.addsms(receiver, sender, msg)
 
-    cs.addsms(receiver, sender, msg)
+        nsent = 0
+        if cs.connect():
+            # add 된 모든 메세지를 서버로 보냅니다.
+            nsent = cs.send()
+        else:
+            print "서버에 접속할 수 없습니다. 네트워크 상태를 확인하세요."
 
-    nsent = 0
-    if cs.connect():
-        # add 된 모든 메세지를 서버로 보냅니다.
-        nsent = cs.send()
-    else:
-        print "서버에 접속할 수 없습니다. 네트워크 상태를 확인하세요."
-
-    # 연결 해제
-    cs.disconnect()
-    cs.emptyall()
-"""
-    print id, pw, sender, receiver, msg
+        # 연결 해제
+        cs.disconnect()
+        cs.emptyall()
+        """
+        print id, pw, sender, receiver, msg
 
 if __name__ == "__main__":
     main()
