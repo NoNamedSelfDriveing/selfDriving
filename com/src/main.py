@@ -66,9 +66,7 @@ if __name__ == '__main__':
             '''
             data, addr  = receiver.receive()
             image.splitImg(data)
-            # image.setImgInfo()
-            # 현재 이미지에 대한 전처리 이미지를 사용하는것이 아니기에 주석처리
-
+            image.setImgInfo()
             data = cv2.resize(image.getImg(),(28,28))
             # 데이터 수신
 
@@ -100,14 +98,13 @@ if __name__ == '__main__':
                 commender.setCommendM(commend)
             # 딥러닝 예측값 설정
 
-            '''
+
             commender.addCommend(image.angle)
             commender.addCommend(image.left_angle)
             commender.addCommend(image.right_angle)
             commender.addCommend(image.x_avr)
-            현재 커맨드에 추가해서 보낼 이유 없음 - 이미지 전처리 사용안함
-            '''
-            
+            # 체크 필요 
+
             commender.endCommend()
             commender.sendCommend(receiver.commend_sock, receiver.commend_sock)
             commender.printCommend()
