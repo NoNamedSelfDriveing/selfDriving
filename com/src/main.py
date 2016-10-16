@@ -4,6 +4,7 @@ import os
 import cv2
 import sys
 import tensorflow as tf
+import time
 from datetime import datetime
 
 sys.path.insert(0,'./ml')               # 뉴럴넷 관련 클래스 모음
@@ -54,6 +55,8 @@ if __name__ == '__main__':
     count = 0  # 프레임 카운트
     commend = 0
 
+    time.sleep(20)
+    
     with tf.Session() as sess:
         # you need to initialize all variables
         tf.initialize_all_variables().run()
