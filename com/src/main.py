@@ -6,25 +6,27 @@ import sys
 import tensorflow as tf
 from datetime import datetime
 
-sys.path.insert(0,'./ml')      # 뉴럴넷 관련 클래스 모음
-sys.path.insert(0,'./network') # 전송 관련 모음
-sys.path.insert(0,'./process') # data 처리 클래스 모음
-sys.path.insert(0,'./commend') # 커맨드 처리 클래스 모음
-sys.path.insert(0,'./sms')     # sms 전송 클래스 모음
+sys.path.insert(0,'./ml')               # 뉴럴넷 관련 클래스 모음
+sys.path.insert(0,'./network')          # 전송 관련 모음
+sys.path.insert(0,'./process')          # data 처리 클래스 모음
+sys.path.insert(0,'./commend')          # 커맨드 처리 클래스 모음
+sys.path.insert(0,'./sms')      # sms 전송 클래스 모음
 
 from Model      import Model
 from Commender  import Commender
 from Receiver   import Receiver
 from Image      import Image
+from Manager    import Manager
 
 def str2bool(v):
   return v.lower() in ("true", "t")
 
 if __name__ == '__main__':
-    receiver  = Receiver(sys.argv[1], sys.argv[2]) # 이미지 수신 객체 ip, port
-    image     = Image() # 이미지 처리 & 커맨드에 들어갈 요소 생성 객체
-    commender = Commender() # 커맨드 생성 & 전송 객체
-    model     = Model()
+    receiver    = Receiver(sys.argv[1], sys.argv[2])    # 이미지 수신 객체 ip, port
+    image       = Image()                               # 이미지 처리 & 커맨드에 들어갈 요소 생성 객체
+    commender   = Commender()                           # 커맨드 생성 & 전송 객체
+    model       = Model()                               # tensorflow 모델 객체
+    sms         = Manager('id', 'pw', '송신자 번호')      # sms 송신 관련 객체
 
     receiver.start() # 서버 시작
 
@@ -96,14 +98,19 @@ if __name__ == '__main__':
 
             if mlOption == True:
                 commender.setCommendM(commend)
-            # 딥러닝 예측값 설정
+                # 딥러닝 예측값 설정
+
+                if sms.issent == False:
+                    sms.sendsms()
+                    sms.issent = True
+                #sms 발송
 
 
             commender.addCommend(image.angle)
             commender.addCommend(image.left_angle)
             commender.addCommend(image.right_angle)
             commender.addCommend(image.x_avr)
-            # 체크 필요 
+            # 체크 필요
 
             commender.endCommend()
             commender.sendCommend(receiver.commend_sock, receiver.commend_sock)
