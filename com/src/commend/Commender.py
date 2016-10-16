@@ -58,9 +58,9 @@ class Commender:
             elif event.type == pygame.KEYUP and event.key == pygame.K_d:
                 self.__d__ = False
 
-            if event.type == pygame.KEYDOWN and event.key == pygame.K_space:
+            if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
                 self.__space__ = True
-            elif event.type == pygame.KEYUP and event.key == pygame.K_space:
+            elif event.type == pygame.KEYUP and event.key == pygame.K_SPACE:
                 self.__space__ = False
 
         if self.__w__:

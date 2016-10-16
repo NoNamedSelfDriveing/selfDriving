@@ -60,7 +60,7 @@ class Image:
 
             angle = (float)(top - 320) / (float)(200)
 
-            cv2.line(self.__img__, (top, 0), (320, 320), (0,250,250), 3, cv2.LINE_AA)
+            cv2.line(self.__img__, (top, 0), (320, 320), (0,250,250), 3, cv2.CV_AA)
 
             self.angle = str(angle)
 
@@ -103,13 +103,13 @@ class Image:
 
             if flag == 0 :
                 total_x += x3
-                cv2.line(img, (pt1[0], pt1[1]), (pt2[0], pt2[1]), (0, 0, 255), 3, cv2.LINE_AA)
-                cv2.line(img, (x3, 100), (x3, 200), (255,0,0), 3, cv2.LINE_AA)
+                cv2.line(img, (pt1[0], pt1[1]), (pt2[0], pt2[1]), (0, 0, 255), 3, cv2.CV_AA)
+                cv2.line(img, (x3, 100), (x3, 200), (255,0,0), 3, cv2.CV_AA)
 
             else :
                 total_x += x3 + 320
-                cv2.line(img, (pt1[0]+320, pt1[1]), (pt2[0]+320, pt2[1]), (0, 0, 255), 3, cv2.LINE_AA)
-                cv2.line(img, (x3+320, 100), (x3+320, 200), (255,0,0), 3, cv2.LINE_AA)
+                cv2.line(img, (pt1[0]+320, pt1[1]), (pt2[0]+320, pt2[1]), (0, 0, 255), 3, cv2.CV_AA)
+                cv2.line(img, (x3+320, 100), (x3+320, 200), (255,0,0), 3, cv2.CV_AA)
 
         try :
             return str(total_angle / count_line), int(total_x / count_line)
@@ -128,7 +128,7 @@ class Image:
 
         self.drawAngle()
 
-        cv2.line(self.__img__, (self.x_avr, 100), (self.x_avr, 200), (0,255,0), 3, cv2.LINE_AA)
+        cv2.line(self.__img__, (self.x_avr, 100), (self.x_avr, 200), (0,255,0), 3, cv2.CV_AA)
 
     def getImg(self):
         return self.__img__

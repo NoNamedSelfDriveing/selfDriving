@@ -55,8 +55,8 @@ if __name__ == '__main__':
     count = 0  # 프레임 카운트
     commend = 0
 
-    print "wait 20sec"
-    time.sleep(20)
+    print "wait 10sec"
+    time.sleep(10)
 
     with tf.Session() as sess:
         # you need to initialize all variables
@@ -94,7 +94,7 @@ if __name__ == '__main__':
             commender.setCommendH() # 사용자 조작값 설정
 
             key = int(commender.getCommend())
-            if key & 0x10: #핸들을 잡고있는 경우
+            if (key & 0x10): #핸들을 잡고있는 경우
                 mlOption = False
             else:
                 mlOption = True
@@ -105,7 +105,7 @@ if __name__ == '__main__':
                 # 딥러닝 예측값 설정
 
                 if sms.issent == False:
-                    sms.sendsms()
+                    sms.sendSMS()
                     sms.issent = True
                 #sms 발송
 

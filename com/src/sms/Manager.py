@@ -1,7 +1,7 @@
 import os
 from sendsms import sms
 
-FNAME = './manager/phone_book'
+FNAME = './sms/manager/phone_book'
 
 class Manager(object):
     def __init__(self, ID, pw, sender):
@@ -9,14 +9,15 @@ class Manager(object):
         self.password   = pw
         self.sender     = sender
         self.receiver   = list()
+        self.issent     = False
 
         self.sms = sms()
 
-    def getFileInfo():
+    def getFileInfo(self):
         file_reader = open(FNAME, "r")
         self.receiver = file_reader.readlines()
 
-    def sendSMS():
-        getFileInfo()
+    def sendSMS(self):
+        self.getFileInfo()
         for who in self.receiver:
-            sms(self.identity, self.password, self.sender, who)
+            self.sms.sms(self.identity, self.password, self.sender, who)
