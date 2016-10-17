@@ -9,6 +9,7 @@
 from PyQt4 import QtCore, QtGui
 from PyQt4.QtCore import pyqtSlot, pyqtSignal
 import os
+import re
 
 FNAME = "./phone_book"
 infoList = list()
@@ -99,6 +100,7 @@ class Ui_MainWindow(object):
 
     def retranslateUi(self, MainWindow):
         MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow", None))
+
         self.label.setText(_translate("MainWindow", "Cell phone.  ", None))
 
         self.label_2.setText(_translate("MainWindow", "Name.  ", None))
@@ -112,15 +114,21 @@ class Ui_MainWindow(object):
     def add_contents(self):
         name = self.lineEdit.text()
         phone = self.lineEdit_2.text()
-        info = str(name)
-        info += str("/" + phone + "\n")
-        infoList.append(info)
+        checked_phone = self.checkPhonenumber(phone)
 
-        file_writer = open(FNAME, "w")
-        for x in infoList:
-            file_writer.write(x)
-        self.listUpdate(info)
-        file_writer.close()
+        if checked_phone:
+            info = str(name)
+            info += str("/" + phone + "\n")
+            infoList.append(info)
+
+            file_writer = open(FNAME, "w")
+            for x in infoList:
+                file_writer.write(x)
+            self.listUpdate(info)
+            file_writer.close()
+
+        else:
+            self.lineEdit_2.setText("Insert without '-'")
 
     def delete_contents(self):
         listItem = list()
@@ -131,12 +139,26 @@ class Ui_MainWindow(object):
         for x in range(self.listWidget.count()):
             listItem.append(str(self.listWidget.item(x).text()))
 
-        print listItem
+        # [for test] print listItem
 
         file_writer = open(FNAME, "w")
         for x in listItem:
             file_writer.write(x + "\n")
         file_writer.close()
+
+    def checkPhonenumber(self, phone):
+        if len(phone) == 11:
+            st = re.match(r"01[0-1][0-9]+", phone)
+        else:
+            st = None
+
+        print st.group()
+        if st == None:
+            return None
+        elif len(st.group()) == 11:
+            return st
+        else:
+            return None
 
     def listUpdate(self, info):
         self.listWidget.addItem(info[:-1])
