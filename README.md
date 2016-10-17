@@ -36,7 +36,7 @@ $ python com/src/main.py ip port
 
 ### 자동차(PI) 실행
 ```
-$ sudo pi/bin/network_commend 5001 &
+$ sudo pi/bin/network_commend port+1 &
 $ pi/bin/client ip port camera_num
 ```
 
