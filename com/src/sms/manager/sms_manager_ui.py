@@ -32,6 +32,8 @@ class Ui_MainWindow(object):
         if os.path.exists(FNAME):
             file_reader = open(FNAME, "r")
             lines = file_reader.readlines()
+            file_reader.close()
+
             for line in lines:
                 if line:
                     infoList.append(line)
@@ -51,20 +53,29 @@ class Ui_MainWindow(object):
         self.label_2.setGeometry(QtCore.QRect(20, 40, 81, 21))
         self.label_2.setAlignment(QtCore.Qt.AlignRight|QtCore.Qt.AlignTrailing|QtCore.Qt.AlignVCenter)
         self.label_2.setObjectName(_fromUtf8("label_2"))
-        self.listView = QtGui.QListWidget(self.centralwidget)
-        self.listView.setGeometry(QtCore.QRect(20, 140, 391, 401))
-        self.listView.setObjectName(_fromUtf8("listView"))
+
+        self.listWidget = QtGui.QListWidget(self.centralwidget)
+        self.listWidget.setGeometry(QtCore.QRect(20, 140, 391, 401))
+        self.listWidget.setObjectName(_fromUtf8("listView"))
+
+
         self.lineEdit = QtGui.QLineEdit(self.centralwidget)
         self.lineEdit.setGeometry(QtCore.QRect(110, 40, 191, 27))
         self.lineEdit.setObjectName(_fromUtf8("lineEdit"))
+
+
         self.lineEdit_2 = QtGui.QLineEdit(self.centralwidget)
         self.lineEdit_2.setGeometry(QtCore.QRect(110, 90, 191, 27))
         self.lineEdit_2.setObjectName(_fromUtf8("lineEdit_2"))
 
         self.pushButton = QtGui.QPushButton(self.centralwidget)
-        self.pushButton.setGeometry(QtCore.QRect(330, 60, 81, 26))
+        self.pushButton.setGeometry(QtCore.QRect(320, 40, 81, 26))
         self.pushButton.setObjectName(_fromUtf8("pushButton"))
         self.pushButton.clicked.connect(self.add_contents)
+        self.pushButton_2 = QtGui.QPushButton(self.centralwidget)
+        self.pushButton_2.setGeometry(QtCore.QRect(320, 90, 81, 26))
+        self.pushButton_2.setObjectName(_fromUtf8("pushButton_2"))
+        self.pushButton_2.clicked.connect(self.delete_contents)
 
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtGui.QMenuBar(MainWindow)
@@ -82,7 +93,7 @@ class Ui_MainWindow(object):
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
         self.retranslateUi(MainWindow)
-        MainWindow.setTabOrder(self.pushButton, self.listView)
+        MainWindow.setTabOrder(self.pushButton, self.listWidget)
 
         self.fileContentsUpdate()
 
@@ -93,6 +104,8 @@ class Ui_MainWindow(object):
         self.label_2.setText(_translate("MainWindow", "Name.  ", None))
 
         self.pushButton.setText(_translate("MainWindow", "ADD", None))
+
+        self.pushButton_2.setText(_translate("MainWindow", "DELETE", None))
 
         self.menuSetting_SMS_Service.setTitle(_translate("MainWindow", "Manage SMS Service", None))
 
@@ -107,11 +120,27 @@ class Ui_MainWindow(object):
         for x in infoList:
             file_writer.write(x)
         self.listUpdate(info)
+        file_writer.close()
 
+    def delete_contents(self):
+        listItem = list()
+        item = self.listWidget.takeItem(self.listWidget.currentRow())
+        item = None
+        self.listWidget.repaint()
+
+        for x in range(self.listWidget.count()):
+            listItem.append(str(self.listWidget.item(x).text()))
+
+        print listItem
+
+        file_writer = open(FNAME, "w")
+        for x in listItem:
+            file_writer.write(x + "\n")
+        file_writer.close()
 
     def listUpdate(self, info):
-        self.listView.addItem(info[:-1])
-        self.listView.repaint()
+        self.listWidget.addItem(info[:-1])
+        self.listWidget.repaint()
 
 if __name__ == "__main__":
     import sys
