@@ -14,7 +14,14 @@
 #include <string.h>
 #include <unistd.h>
 
+#include <thread>
+
 #define SIZE sizeof(struct sockaddr_in)
+
+#define SAFEDIS 20
+
+#define TRIG 26
+#define ECHO 22
 
 #define SPEED 40
 
@@ -39,10 +46,16 @@
 char log[1024];
 unsigned int i;
 
-void insert(int, int);
-void stop();
-void set_direct(int);
-void rotateServo(int);
+int FLAG;
+long startTime, travelTime;
+int distance;
+
+void    insert(int, int);
+void    stop();
+void    set_direct(int);
+void    rotateServo(int);
+int     getCM();
+void    threadService();
 
 void closesock(int sig);
 
@@ -84,13 +97,17 @@ int main(int argc, char *argv[]){
     pinMode(DC_A, OUTPUT);
     pinMode(DC_B, OUTPUT);
     pinMode(SERVO, OUTPUT);
+    pinMode(ECHO, INPUT);
+    pinMode(TRIG, OUTPUT);
+
+    std::thread t1(&threadService);
 
     set_direct(FRONT);
 
     int Cont_command;
     char msg[1024];
     char *Cent_msg, *Sum_msg, *Cont_msg;
-    //int fd = fopen("log", O_WRONLY | O_CREAT);
+
     while(1){
         if((sockfd_connect = accept(sockfd, NULL,NULL)) < 0){
             printf("fail to call accept()\n");
@@ -103,8 +120,8 @@ int main(int argc, char *argv[]){
 
             Cont_command = atoi(Cont_msg);
 
-            std::cout << msg << std::endl;
-            if(Cont_command & _GO){
+            std::cout << msg << FLAG << std::endl;
+            if((Cont_command & _GO) && !(FLAG)){
                 set_direct(FRONT);
                 if(Cont_command & _LEFT) 
                 {
@@ -175,4 +192,30 @@ void rotateServo(int time)
     delayMicroseconds(time);
     digitalWrite(SERVO, LOW);
     delayMicroseconds(23);
+}
+
+int getCM()
+{
+    digitalWrite(TRIG, HIGH);
+    delayMicroseconds(20);
+    digitalWrite(TRIG, LOW);
+
+    while(digitalRead(ECHO) == LOW);
+
+    startTime = micros();
+    while(digitalRead(ECHO) == HIGH);
+    travelTime = micros() - startTime;
+
+    distance = travelTime / 58;
+
+    return distance;
+}
+
+void threadService()
+{
+    while(1)
+    {
+        if(getCM() > SAFEDIS) FLAG = 0;
+        else FLAG = 1;
+    }
 }
