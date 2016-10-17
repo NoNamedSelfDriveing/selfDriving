@@ -116,7 +116,7 @@ class Ui_MainWindow(object):
         phone = self.lineEdit_2.text()
         checked_phone = self.checkPhonenumber(phone)
 
-        if checked_phone:
+        if not checked_phone == None:
             info = str(name)
             info += str("/" + phone + "\n")
             infoList.append(info)
@@ -128,7 +128,7 @@ class Ui_MainWindow(object):
             file_writer.close()
 
         else:
-            self.lineEdit_2.setText("Insert without '-'")
+            self.lineEdit_2.setText("ex) 01012345678")
 
     def delete_contents(self):
         listItem = list()
@@ -152,7 +152,6 @@ class Ui_MainWindow(object):
         else:
             st = None
 
-        print st.group()
         if st == None:
             return None
         elif len(st.group()) == 11:
