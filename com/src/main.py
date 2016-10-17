@@ -31,7 +31,7 @@ if __name__ == '__main__':
 
     receiver.start() # 서버 시작
 
-    mlOption = str2bool(sys.argv[3]) # True 인 경우 tensorflow로 아니면 키보드로
+    mlOption = False
 
     timeSize = 19 # log 이름에 사용될 길이
     logdate = str(datetime.now())[:timeSize] # yyyy-mm-dd hh:mm:ss
