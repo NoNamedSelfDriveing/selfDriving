@@ -35,7 +35,7 @@ class sms(object):
         cs.disconnect()
         cs.emptyall()
 
-        #test print idd, pw, sender, receiver, msg
+        #test print id, pw, sender, receiver, msg
 
 if __name__ == "__main__":
     main()
