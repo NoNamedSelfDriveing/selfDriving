@@ -10,8 +10,8 @@ import sys
 import coolsms
 
 class sms(object):
-    def sms(id, pw, sender, receiver, msg):
-        """
+    def sms(self, id, pw, sender, receiver, msg):
+
         cs = coolsms.sms()
 
         cs.appversion("TEST/1.0")
@@ -34,8 +34,8 @@ class sms(object):
         # 연결 해제
         cs.disconnect()
         cs.emptyall()
-        """
-        print id, pw, sender, receiver, msg
+
+        #test print id, pw, sender, receiver, msg
 
 if __name__ == "__main__":
     main()
