@@ -27,7 +27,7 @@ if __name__ == '__main__':
     image       = Image()                               # 이미지 처리 & 커맨드에 들어갈 요소 생성 객체
     commender   = Commender()                           # 커맨드 생성 & 전송 객체
     model       = Model()                               # tensorflow 모델 객체
-    sms         = Manager('id', 'pw', '송신자 번호')      # sms 송신 관련 객체
+    sms         = Manager('id', 'pw', 'phone')      # sms 송신 관련 객체
 
     receiver.start() # 서버 시작
 
@@ -56,7 +56,7 @@ if __name__ == '__main__':
     commend = 0
 
     print "wait 10sec"
-    time.sleep(10)
+    time.sleep(3)
 
     with tf.Session() as sess:
         # you need to initialize all variables

@@ -1,8 +1,12 @@
 import os
+import sys
+reload(sys)
+sys.setdefaultencoding('utf-8')
+
 from sendsms import sms
 
-FNAME = './manager/phone_book'
-MSG = 'Changed itself'
+FNAME = './sms/manager/phone_book'
+MSG = "Status error detected, Changed Driving Mode"
 
 class Manager(object):
     def __init__(self, ID, pw, sender):
@@ -19,11 +23,7 @@ class Manager(object):
         self.receiver = file_reader.readlines()
 
     def sendSMS(self):
+        print 'sms sended'
         self.getFileInfo()
         for who in self.receiver:
             self.sms.sms(self.identity, self.password, self.sender, who, MSG)
-
-if __name__ == "__main__":
-    print 'start'
-    sms = Manager("nonamed123", "nonamed123", "01047230479")
-    sms.sendSMS()

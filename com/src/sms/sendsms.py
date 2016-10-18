@@ -11,7 +11,7 @@ import coolsms
 
 class sms(object):
     def sms(self, id, pw, sender, receiver, msg):
-
+        
         cs = coolsms.sms()
 
         cs.appversion("TEST/1.0")
@@ -35,7 +35,7 @@ class sms(object):
         cs.disconnect()
         cs.emptyall()
 
-        #test print id, pw, sender, receiver, msg
+        #print id, pw, sender, receiver, msg
 
 if __name__ == "__main__":
     main()
