@@ -10,6 +10,10 @@ from PyQt4 import QtCore, QtGui
 from PyQt4.QtCore import pyqtSlot, pyqtSignal
 import os
 import re
+import sys
+
+reload(sys)
+sys.setdefaultencoding('utf-8')
 
 FNAME = "./phone_book"
 infoList = list()
@@ -39,7 +43,7 @@ class Ui_MainWindow(object):
                 if line:
                     infoList.append(line)
         for info in infoList:
-            self.listUpdate(info)
+            self.listUpdate(unicode(info, 'utf-8'))
 
     def setupUi(self, MainWindow):
         MainWindow.setObjectName(_fromUtf8("MainWindow"))
@@ -100,37 +104,40 @@ class Ui_MainWindow(object):
 
     def retranslateUi(self, MainWindow):
         MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow", None))
-
         self.label.setText(_translate("MainWindow", "Cell phone.  ", None))
-
         self.label_2.setText(_translate("MainWindow", "Name.  ", None))
-
         self.pushButton.setText(_translate("MainWindow", "ADD", None))
-
         self.pushButton_2.setText(_translate("MainWindow", "DELETE", None))
-
         self.menuSetting_SMS_Service.setTitle(_translate("MainWindow", "Manage SMS Service", None))
 
     def add_contents(self):
-        name = self.lineEdit.text()
-        phone = self.lineEdit_2.text()
-        checked_phone = self.checkPhonenumber(phone)
+        name = self.lineEdit
+        phone = self.lineEdit_2
+        checked_phone = self.checkPhonenumber(phone.text())
 
         if not checked_phone == None:
-            info = str(name)
-            info += str("/" + phone + "\n")
+            info = str(name.text())
+            info += str("/" + phone.text() + "\n")
             infoList.append(info)
 
             file_writer = open(FNAME, "w")
             for x in infoList:
                 file_writer.write(x)
-            self.listUpdate(info)
+            self.listUpdate(unicode(info, 'utf-8'))
             file_writer.close()
 
+            name.setText("")
+            phone.setText("")
+
         else:
-            self.lineEdit_2.setText("ex) 01012345678")
+            phone.setText("ex) 01012345678")
+            phone.setFocus()
+            phone.selectAll()
 
     def delete_contents(self):
+        name = self.lineEdit
+        phone = self.lineEdit_2
+
         listItem = list()
         item = self.listWidget.takeItem(self.listWidget.currentRow())
         item = None
@@ -145,6 +152,9 @@ class Ui_MainWindow(object):
         for x in listItem:
             file_writer.write(x + "\n")
         file_writer.close()
+
+        name.setText("")
+        phone.setText("")
 
     def checkPhonenumber(self, phone):
         if len(phone) == 11:
