@@ -114,6 +114,7 @@ if __name__ == '__main__':
             commender.addCommend(image.left_angle)
             commender.addCommend(image.right_angle)
             commender.addCommend(image.x_avr)
+            commender.addCommend(mlOption)
             # 체크 필요
 
             commender.endCommend()
