@@ -14,8 +14,6 @@
 #include <string.h>
 #include <unistd.h>
 
-#include <thread>
-
 #define SIZE sizeof(struct sockaddr_in)
 
 #define SAFEDIS 20
@@ -102,13 +100,11 @@ int main(int argc, char *argv[]){
     pinMode(ECHO, INPUT);
     pinMode(TRIG, OUTPUT);
 
-    std::thread t1(&threadService);
-
     set_direct(FRONT);
 
-    int Cont_command, Sum_command;
-    double Xangle_command, Left_angle_command, Right_angle_command;
-    char msg[1024], *Mode_msg[8], Mode_command[8];
+    int Cont_command, Sum_command, Xangle_command;
+    double Left_angle_command, Right_angle_command;
+    char msg[1024], *Mode_msg, Mode_command[8];
     char *Cont_msg, *Sum_msg, *Xangle_msg, *Left_angle_msg, *Right_angle_msg;
 
     while(1){
@@ -119,78 +115,80 @@ int main(int argc, char *argv[]){
 
         printf("accepted\n");
         while(recv(sockfd_connect, &msg, 1024, 0) > 0){
-            std::cout << msg << std::endl;
-
-            Cont_msg = strtok(msg,",");
+            Cont_msg = strtok(msg, ",");
             Mode_msg = strtok(NULL, ",");
-            Xangle_msg  strtok(NULL, ',');
-            Left_angle_msg  strtok(NULL, ',');
-            Right_angle_msg = strtok(NULL, ',');
-            Sum_msg = strtok(NULL, '\0');
+            Xangle_msg = strtok(NULL, ",");
+            Left_angle_msg = strtok(NULL, ",");
+            Right_angle_msg = strtok(NULL, ",");
+            Sum_msg = strtok(NULL, "\0");
 
             Cont_command = atoi(Cont_msg);
-            Xangle_command = atof(Xangle_msg);
+            Xangle_command = atoi(Xangle_msg);
             Sum_command = atoi(Sum_msg);
-            strcpy(Mode_command, Mode_msg);
 
-            if( !(strcmp(Mode_command, "True"))==0 )
+            std::cout << "Cont:" << Cont_msg << "\n" << \
+                "Xcenter:" << Xangle_msg <<std::endl;
+
+            if( (strcmp(Mode_msg, "False")) == 0 )
             {
-            if((Cont_command & _GO) && FLAG){
+                std::cout << "Test:False" << std::endl;
+                if(Cont_command & _GO){
+                    set_direct(FRONT);
+                    if(Cont_command & _LEFT)
+                    {
+                        rotateServo(LEFT);
+                    }
+                    else if(Cont_command & _RIGHT)
+                    {
+                        rotateServo(RIGHT);
+                    }
+                    else
+                    {
+                        rotateServo(CENTER);
+                    }
+    
+                    if(getCM() > SAFEDIS)
+                        softPwmWrite(DC_PULSE_OUT, SPEED);
+                }
+                else if(Cont_command & _BACK){
+                    set_direct(BACK);
+                    if(Cont_command & _LEFT)
+                    {
+                        rotateServo(LEFT);
+                    }
+                    else if(Cont_command & _RIGHT)
+                    {
+                        rotateServo(RIGHT);
+                    }
+                    else
+                    {
+                        rotateServo(CENTER);
+                    }
+
+                    softPwmWrite(DC_PULSE_OUT, SPEED);
+                }
+                else stop();
+            }
+
+            else if( (strcmp(Mode_msg, "True")) == 0)
+            {
+                std::cout << "Test:True" << std::endl;
                 set_direct(FRONT);
-                if(Cont_command & _LEFT)
-                {
-                    rotateServo(LEFT);
-                    softPwmWrite(DC_PULSE_OUT, SPEED + 20);
-                }
-                else if(Cont_command & _RIGHT)
-                {
-                    rotateServo(RIGHT);
-                    softPwmWrite(DC_PULSE_OUT, SPEED + 20);
-                }
-                else
+                if(Xangle_command > 45 && Xangle_command < 55)
                 {
                     rotateServo(CENTER);
-                    softPwmWrite(DC_PULSE_OUT, SPEED);
                 }
-            }
-            else if(Cont_command & _BACK){
-                set_direct(BACK);
-                if(Cont_command & _LEFT)
+                else if(Xangle_command < 50 )
                 {
                     rotateServo(LEFT);
-                    softPwmWrite(DC_PULSE_OUT, SPEED + 20);
                 }
-                else if(Cont_command & _RIGHT)
+                else if(Xangle_command > 50 )
                 {
                     rotateServo(RIGHT);
-                    softPwmWrite(DC_PULSE_OUT, SPEED + 20);
                 }
-                else
-                {
-                    rotateServo(CENTER);
-                    softPwmWrite(DC_PULSE_OUT, SPEED);
-                }
+
+                softPwmWrite(DC_PULSE_OUT, SPEED + 10);
             }
-            else stop();
-          }
-          else if(!(strcmp(Mode_command, "False")) == 0)
-          {
-            if(Sum_command > 0)
-            {
-              rotateServo(RIGHT);
-              softPwmWrite(DC_PULSE_OUT, SPEED + 20);
-            }
-            else if(Sum_command < 0)
-            {
-              rotateServo(LEFT);
-              softPwmWrite(DC_PULSE_OUT, SPEED + 20);
-            }
-            else
-            {
-              rotateServo(CENTER);
-              softPwmWrite(DC_PULSE_OUT, SPEED);
-            }
-          }
         }
         printf("close(sockfd_connect)\n");
         close(sockfd_connect);
@@ -241,15 +239,5 @@ int getCM()
 
     distance = travelTime / 58;
 
-    std::cout <<distance << std::endl;
     return distance;
-}
-
-void threadService()
-{
-    while(1)
-    {
-        if(getCM() > SAFEDIS) FLAG = 1;
-        else FLAG = 0;
-    }
 }
