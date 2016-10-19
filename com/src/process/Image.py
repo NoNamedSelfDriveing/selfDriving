@@ -22,9 +22,11 @@ class Image:
 
         self.x_avr       = int
 
+        self.x_center    = str
+
     def splitImg(self, data):
         self.__img__         = cv2.imdecode(np.frombuffer(data, np.uint8), 1)
-        self.__img__         = self.__img__[200:, :]
+        self.__img__         = self.__img__[300:, :]
 
         blur                 = cv2.GaussianBlur(self.__img__, (7,7),1.5, 1.5)
 
@@ -91,6 +93,7 @@ class Image:
 
             x3 = x1 + x2
             x3 = x3 / 2 # find center x point of the line
+            self.x_center = x3
 
             try:
                 angle = (float)(x2 - x1) / (float)(y2 - y1)
@@ -135,3 +138,6 @@ class Image:
 
     def getCanny(self):
         return self.__canny__
+
+    def getCenter(self):
+        return self.x_center

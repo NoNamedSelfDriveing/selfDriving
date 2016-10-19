@@ -55,8 +55,10 @@ if __name__ == '__main__':
     count = 0  # 프레임 카운트
     commend = 0
 
+    """
     print "wait 10sec"
     time.sleep(10)
+    """
 
     with tf.Session() as sess:
         # you need to initialize all variables
@@ -110,7 +112,8 @@ if __name__ == '__main__':
                 #sms 발송
 
 
-            commender.addCommend(image.angle)
+            commender.addCommend(mlOption)
+            commender.addCommend(image.x_center)
             commender.addCommend(image.left_angle)
             commender.addCommend(image.right_angle)
             commender.addCommend(image.x_avr)
@@ -119,7 +122,6 @@ if __name__ == '__main__':
             commender.endCommend()
             commender.sendCommend(receiver.commend_sock, receiver.commend_sock)
             commender.printCommend()
-            print ""
             # 명령어 전송
 
             img = cv2.resize(image.getImg(), (28, 28))

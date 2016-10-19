@@ -1,7 +1,7 @@
 import os
 from sendsms import sms
 
-FNAME = './manager/phone_book'
+FNAME = './sms/manager/phone_book'
 MSG = 'Changed itself'
 
 class Manager(object):
